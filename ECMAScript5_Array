@@ -1,0 +1,156 @@
+<script>
+    /**
+    * ECMAScript 5 Array 迭代方法的兼容重写（基础）
+    */
+    
+    var arr = [1,2,3,4,5];//测试数组初始化
+    
+    /**
+    * forEach(f[,o]) 
+    *    类似 for/in 循环，遍历整个数组并执行函数的某些操作，但是不会遍历数组的属性；
+    *    接受一个函数参数，该函数可以有1、2或者3个参数；
+    *    完整的三个参数分别是：数组中的每一个值(arr[i]),数组的索引(i),数组本身(arr)；
+    *    该函数参数没有返回值。
+    */
+    
+    function forEach(arr,fn){
+        if(!arr.forEach){
+            arr.forEach(fn);
+        }else{
+            for(var i = 0; i < arr.length; i++){
+                // fn(arr[i]);
+                fn(arr[i],i,arr);
+            }
+        } 
+   }
+   forEach(arr,function(item){ console.log(item * 2);});
+   
+   /**
+   * map(f[,o])
+   *    类似 forEach 方法，但是有返回值，返回一个新数组；
+   *    参数函数的返回值作为新数组的元素。
+   */
+   
+    function map(arr,fn){
+        if(arr.map){
+            arr = arr.map(fn);
+        }else{
+            for(var i = 0; i < arr.length; i++){
+                arr[i] = fn(arr[i],i,arr);
+            }
+        }
+        return arr;
+    }
+    map(arr,function(item){ return item*2;});
+    
+    /**
+    * filter(f[,o])
+    *    对数组元素进行过滤，返回一个新数组。
+    */
+    
+      function filter(arr,fn){
+        if(arr.filter){
+            return arr.filter(fn);
+        }else{
+            /** 利用tmp[]
+            var tmp = [];
+            for(var i = 0; i < arr.length; i++){
+                var flag = fn(arr[i],i,arr);
+                if(flag)
+                    tmp.push(arr[i]);
+            }
+            return tmp;
+            */
+            //利用 数组的splice（）方法
+            for(var i = 0; i < arr.length; i++) {
+                var flag = fn(arr[i],i,arr);
+                if(!flag){
+                    arr.splice(i,1);
+                    i--;
+                }                   
+            }
+            return arr;
+        }
+    }
+    filter(arr,function(item){
+        if(item > 3){
+            return true;
+        }
+    });
+    
+    /**
+    * some(f[,o])
+    *    有一个布尔类型的返回值；
+    *    函数参数 f 用来检测数组元素是否满足要求；
+    *    只要有一个数组元素满足 f 的要求，则返回true，否则false。
+    */
+    
+    function some(arr,fn){
+        if(arr.some){
+            return arr.some(fn);
+        }else{
+            for(var i =0; i < arr.length; i++){
+                var flag = fn(arr[i],i,arr);
+                if(flag)
+                    return true;
+            }
+            return false;
+        }        
+    }
+    some(arr,function(item){
+        if(item > 0)
+            return 1;
+    });
+    
+    /**
+    * every(f[,o])
+    *    返回一个布尔类型的值；
+    *    只要有一个数组元素不满足 f 的要求，就返回false，全部元素满足才返回true。
+    */
+    
+    function every(arr,fn){
+        if(arr.every){
+            return arr.every(fn);
+        }else{
+            for (var i = 0; i < arr.length; i++) {
+                var flag = fn(arr[i],i,arr);
+                if(!flag)
+                    return false;
+            }
+            return true;
+        }
+    }
+    every(arr,function(item){
+        if(item > 2){
+            return 1;
+        }
+    });
+    
+    /**
+    * reduce(f[,initial,index,arr])
+    *    对数组元素值进行计算，返回最后一次计算的结果；
+    *    函数 f(x,y) 有2个参数，如果有初始值，则把初始值作为x来计算，把每次的计算值作为下一次的x,把数组元素依次作为y；
+    *    如果缺省初始值，则把数组的第一个元素作为初始值。
+    */
+    
+    function reduce(arr,fn,init){
+        if(arr.reduce){
+            return arr.reduce(fn);
+        }else{
+            var pre = init, i = 0;
+
+            if(typeof init === "undefined"){
+                pre = arr[0];
+                i = 1;
+            }
+            for(i; i < arr.length; i++){
+                pre = fn(pre,arr[i],i,arr);
+            }
+            return pre;
+        } 
+    }
+    reduce(arr,function(item1,item2){
+        return item1+item2;
+    },2);
+  
+</script>
