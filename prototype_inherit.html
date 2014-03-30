@@ -5,6 +5,24 @@
 </head>
 <body>
     <script>
+    
+        //利用闭包，在原型里创建私有变量
+        
+        function D(){
+            D.prototype.name = "aa";
+            return {               
+                setName: function(name){ D.prototype.name = name;},
+                getName: function(){ return D.prototype.name;}
+            }
+        }
+        var d = new D();
+        d.getName();
+        d.setName("aaaa");
+    
+    </script>
+
+    <script>
+    
         /**
          *  类式继承模式 #1  ————— 默认模式
          *
