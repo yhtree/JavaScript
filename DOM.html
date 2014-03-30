@@ -73,30 +73,43 @@
         }
     }
 
-    //如何获取css
-    function getCss(target, attr){
-        return target.style[attr];
-    }
+    /**
+	*	使用currentStyle和computedStyle进行css的通用获取函数
+	*   IE : window.getConputedStyle
+	*   非IE：element.currentStyle
+	*/
+	function getCss(target,attr){
+		if(window.getConputedStyle){
+			return window.getConputedStyle(target,null)[attr];
+		}else{
+			return target.currentStyle[attr];
+		}
+	}
 
-    function setCss(target, attr, value){
-        target.style[attr] = value;
-    }
+	function setCss(target,attr,value){
+		target.style[attr] = value;
+	}
 
     function css(){
         var len = arguments.length;
+
         if(len < 2){
             return;
         }
+
         if(len < 3){
             var target = arguments[0],
                 attr = arguments[1];
+
             return getCss(target,attr);
         }
+
         if(len < 4){
-            var target = arguments[0];
-            var attr = arguments[1];
-            var value = arguments[2];
-            return setCss(target,attr,value);
+            var target = arguments[0],
+                attr = arguments[1],
+                value = arguments[2];
+
+            setCss(target,attr,value);
         }
     }
 
