@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+     <script>
+         /**
+          * nodeType属性总共有12种可取值，但其中仅有3种具有实用价值：元素节点、属性节点和文本节点
+          * 元素节点 的nodeType属性值是 1   
+          * 属性节点 的nodeType属性值是 2   
+          * 文本节点 的nodeType属性值是 3
+          */
+         
+         //返回一个节点的所有子元素节点
+          function childNodes(parent){
+             var children = parent.childNodes;
+             var tmp = [];
+             for(var i = 0; i < children.length; i++){
+                 if(children[i].nodeType == 1){
+                     tmp.push(children[i]);
+                 }
+             }
+             return tmp;
+         }
+
+         //返回一个节点的所有兄弟元素节点
+           function siblings(node){
+               var parent = node.parentNode;
+               var children = parent.childNodes;
+               var tmp = [];
+
+               for(var i = 0; i < children.length; i++){
+                   if(children[i] != node){
+                       tmp.push(children[i]);
+                   }
+               }
+               return tmp;
+           }
+
+         /**
+          * 文档碎片
+          * @type {DocumentFragment}
+          */
+          
+         var fragment = document.createDocumentFragment();
+
+         for(var i = 0 ; i < 10; i ++){
+             var img = document.createElement("img"),
+                 a = document.createElement("a"),
+                 div = document.createElement("div");
+                 
+             var body = document.getElementsByTagName("body")[0];
+
+             //img属性
+             img.src = "./pic.png";
+
+             a.appendChild(img);
+             a.href="http://www.baidu.com";
+
+             div.appendChild(a);
+
+             fragment.appendChild(div);
+             
+             body.appendChild(fragment);
+         }
+
+     </script>
+
+</body>
+</html>
