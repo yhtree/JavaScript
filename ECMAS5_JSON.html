@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> ECMAScript 5 Array 迭代方法的兼容重写（基础）</title>
+</head>
+<body>
+    <script>
+    var json = '{"name": "yanghuaitree","school": "cqupt"}'; 
+    function parse(json){
+        if(JSON.parse){
+            return JSON.parse(json);
+        }else{
+            return eval("("+json+")"); 
+        }
+    }
+}
+    /**
+    * Function 被称为构造函数，允许javascript代码动态创建并且在运行时编译，类似eval()；
+    * Function 创建的函数都是顶层函数（window 的函数）；
+    *
+    * var f = new Function('x','y', 'return x+y'); 相当于 function f(x,y){ return x+y; }
+    */
+    
+    function parse(json){
+        if(JSON.parse){
+            return JSON.parse(json);
+        }else{
+            //这里的json有单引号，不能是双引号也不能省略
+            var fn = new Function('json', 'return'+json);
+            return fn(json);
+        }
+    }
+    </script> 
+     
+</body>
+</html>
