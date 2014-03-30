@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> DOM 对象操作</title>
+    <style>
+        #box { height:200px; width:200px; position: absolute; background: red; top: 0; left: 0;}
+    </style>
+</head>
+<body>
+<div id="main">
+    <div class="class1">
+        <h2 class="1">1</h2>
+        <p>this is <span>one</span></p>
+    </div>
+    <div class="class1">
+        <h2 class="1">11</h2>
+        <p>this is <span>one one</span></p>
+    </div>
+    <div class="class2">
+        <h2 class="2">2</h2>
+        <p>this is <span>two</span></p>
+    </div>
+    <div class="class2 two">
+        <h2 class="2">22</h2>
+        <p>this is <span>two two</span></p>
+    </div>
+</div>
+<div id = "box"></div>
+
+<script>
+
+    /**
+     *  getElementById 的兼容函数，在IE6 IE7下 ,当id = name 时，会返回name=id的元素
+     */
+
+    function getElementById(id){
+        if(document.querySelector){
+            return document.querySelector(id);
+        }else{
+            id = id.slice(1);
+            var obj = document.getElementById(id);
+            if(obj.id != id){
+                var objs = document.getElementsByTagName("*");
+                for(var i = 0; i < objs.length; i++){
+                    if(objs[i].id == id){
+                        return objs[i];
+                    }
+                }
+            }
+            return obj;
+        }
+    }
+
+    /**
+     *  下面 else{} 里面的代码，不能解决class =“class1 class2”这种情况，它只能找到满足第一个类名的元素
+     *  但是querySelectorAll则可以实现
+     */
+
+    function getElementsByClassName(className){
+        if(document.querySelectorAll){
+            return document.querySelectorAll(className);
+        }
+        else{
+            var objs = document.getElementsByTagName("*");
+            var tmp = [];
+            var className = className.slice(1);
+            for(var i = 0; i < objs.length; i++){
+                if(objs[i].className == className){
+                    tmp.push(objs[i]);
+                }
+            }
+            return tmp;
+        }
+    }
+
+    //如何获取css
+    function getCss(target, attr){
+        return target.style[attr];
+    }
+
+    function setCss(target, attr, value){
+        target.style[attr] = value;
+    }
+
+    function css(){
+        var len = arguments.length;
+        if(len < 2){
+            return;
+        }
+        if(len < 3){
+            var target = arguments[0],
+                attr = arguments[1];
+            return getCss(target,attr);
+        }
+        if(len < 4){
+            var target = arguments[0];
+            var attr = arguments[1];
+            var value = arguments[2];
+            return setCss(target,attr,value);
+        }
+    }
+
+    //将一个高宽的200px的 div 置于浏览器页面正中间，并且随视口变化而居中
+    setInterval(function(){
+        var div1 = getElementById("#box");
+        var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        var clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var _top = (clientHeight - div1.offsetHeight)/2 + scrollTop;
+        var _left = (clientWidth - div1.offsetWidth)/2;
+        css(div1, "top", _top+"px");
+        css(div1, "left", _left+"px");
+    },1000/60);
+
+</script>
+</body>
+</html>
